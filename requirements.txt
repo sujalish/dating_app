@@ -1,0 +1,12 @@
+User Registration:
+
+Users must be able to create an account using their email address, username, and password.
+User passwords must be securely hashed and stored.
+User registration must include a basic profile setup with the following information:
+- Username
+- Email
+- Password
+- Gender (Male/Female/Other)
+- Date of Birth
+- Location (City, Country)
+
