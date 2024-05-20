@@ -1,6 +1,6 @@
 const User = require('../models/User');
 
-exports.getUserProfile = async (req, res) => {
+getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     res.json(user);
@@ -9,7 +9,38 @@ exports.getUserProfile = async (req, res) => {
   }
 };
 
-exports.updateUserProfile = async (req, res) => {
+const createUserProfile = async (req, res) => {
+  try {
+    const { username, email, password, gender, dateOfBirth, location, bio, photos, preferences } = req.body;
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+
+    // Create new user
+    const user = new User({
+      username,
+      email,
+      password,
+      gender,
+      dateOfBirth,
+      location,
+      bio,
+      photos,
+      preferences,
+    });
+
+    await user.save();
+
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+updateUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
 
@@ -26,4 +57,10 @@ exports.updateUserProfile = async (req, res) => {
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
+};
+
+module.exports = {
+  getUserProfile,
+  updateUserProfile,
+  createUserProfile
 };
